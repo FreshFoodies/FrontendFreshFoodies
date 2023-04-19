@@ -3,16 +3,22 @@ import { StyleSheet, TouchableOpacity, Text } from "react-native";
 
 TouchableOpacity.defaultProps = { activeOpacity: 0.8 };
 
-const App = ({ onPress, title, color, width }) => {
+const App = ({ onPress, title, color, width, height, fontSize }) => {
   if (!width) {
     width = 271
+  }
+  if (!height) {
+    height = 75
+  }
+  if (!fontSize) {
+    fontSize = 25
   }
   return (
     <TouchableOpacity onPress={onPress} style={{
         backgroundColor: color,
         borderRadius: 20,
         width,
-        height: 75,
+        height,
         justifyContent: "center",
         // paddingVertical: 18,
         // paddingHorizontal: 30,
@@ -22,18 +28,14 @@ const App = ({ onPress, title, color, width }) => {
         shadowRadius: 2,  
         elevation: 5
       }}>
-        <Text style={styles.appButtonText}>{title}</Text>
+        <Text style={{
+          fontSize,
+          color: "#FFFFFF",
+          fontWeight: "bold",
+          alignSelf: "center",
+        }}>{title}</Text>
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  appButtonText: {
-    fontSize: 25,
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    alignSelf: "center",
-  }
-});
 
 export default App;

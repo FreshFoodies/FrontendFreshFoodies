@@ -1,8 +1,10 @@
 const FoodDictionary = {
-    "brown rice": "Brown Rice",
-    "cabbage": "cabbage",
-    "ginger": "ginger",
-    "yogurt": "yogurt"
+    "rice": ["Rice", "grain"],
+    "bread": ["Bread", "grain"],
+    "cabbage": ["Cabbage", "produce"],
+    "ham": ["Ham", "meat"],
+    "beef": ["Beef", "meat"],
+    "yogurt": ["Yogurt", "dairy"]
 }
 
 export default FoodDictionary
