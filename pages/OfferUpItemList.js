@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -8,13 +8,11 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function ItemList(props) {
-
+function OfferUpItemList(props) {
   // create inventory
   let inventory = {};
   let sortCategoryList = [];
   let sort = props.sort ? props.sort : "category"; // if props sort is undefined - default is category
-  console.log("sort is: " + sort);
 
   if (sort == "category" || sort == "location") {
     // create the lists of each
@@ -24,7 +22,7 @@ function ItemList(props) {
       inventory[sortName] = [];
     }
 
-    var data = AsyncStorage.getItem("data");
+    // var data = AsyncStorage.getItem("data");
     // add the items into the lists
     for (let i = 0; i < props.data.length; i++) {
       let item = props.data[i];
@@ -75,10 +73,6 @@ function ItemList(props) {
       inventory["quantity"].push(quantitySort[i]);
     }
   }
-  
-  function handlePress() {
-    console.log("I am doing nothing")
-  }
 
   // now produce it onto the inventory
   var inventoryContainer = [];
@@ -93,11 +87,43 @@ function ItemList(props) {
       var items = [];
       for (let j = 0; j < inventory[currSort].length; j++) {
         let currItem = inventory[currSort][j].name;
+
+        const [clicked, setClicked] = useState(false);
+
+        function handlePress(currItem) {
+          if (!props.foodArray.includes(currItem)) {
+            //checking weather array contain the id
+            props.foodArray.push(currItem); //adding to array because value doesnt exists
+          } else {
+            props.foodArray.splice(props.foodArray.indexOf(currItem), 1); //deleting
+          }
+          // props.foodArray.push(currItem);
+          console.log(props.foodArray);
+          setClicked((current) => !current);
+        }
+
         items.push(
           <TouchableOpacity
-            onPress={handlePress}
-            style={styles.item}
+            onPress={() => handlePress(inventory[currSort][j])}
             key={currItem + "_item"}
+            style={{
+              margin: "1%",
+              backgroundColor: "white",
+              width: "48%",
+              height: 100,
+              justifyContent: "center",
+              alignItems: "center",
+              borderWidth: clicked ? 3 : 1,
+              borderRadius: 10,
+              borderColor: clicked ? "#2FC6B7" : "grey",
+              shadowColor: "grey",
+              shadowOpacity: 0.8,
+              shadowRadius: 4,
+              shadowOffset: {
+                height: 1,
+                width: 1,
+              },
+            }}
           >
             <Text style={{ fontSize: 20 }} key={currItem + "_item_text"}>
               {currItem}
@@ -151,6 +177,20 @@ function ItemList(props) {
       );
     }
   }
+
+  if (inventoryContainer.length == 0) {
+    inventoryContainer.push(
+      <Text style={styles.empty} key={0}>
+        It looks like your {props.basket} is empty.
+      </Text>
+    );
+    inventoryContainer.push(
+      <Text style={styles.empty} key={1}>
+        {props.details}
+      </Text>
+    );
+  }
+
   return <ScrollView style={styles.container}>{inventoryContainer}</ScrollView>;
 }
 
@@ -165,24 +205,6 @@ const styles = StyleSheet.create({
     paddingBottom: "3%",
     flexDirection: "row",
     flexWrap: "wrap",
-  },
-  item: {
-    margin: "1%",
-    backgroundColor: "white",
-    width: "48%",
-    height: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "grey",
-    shadowColor: "grey",
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    shadowOffset: {
-      height: 1,
-      width: 1,
-    },
   },
   category_title: {
     fontSize: 25,
@@ -217,7 +239,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ItemList;
+export default OfferUpItemList;
 
 let json = [
   {

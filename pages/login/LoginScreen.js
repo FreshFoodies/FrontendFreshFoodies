@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput } from "react-native";
 import Button from "../components/Button.js";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { makeHTTPRequest } from '../utils/HttpUtils.js';
+import { makeHTTPRequest, createFridge } from '../utils/HttpUtils.js';
 
 const LoginScreen = () => {
   const [userName, setUserName] = useState(null)
@@ -77,33 +77,9 @@ const LoginScreen = () => {
       AsyncStorage.setItem('user_email', response.email);
       AsyncStorage.setItem('user_id', response._id);
 
-      createPersonalFridge(response.email, response.name + "_personal_fridge");
+      createFridge(response.email, response.name + "_personal_fridge");
     }
     navigation.navigate("Home")
-  }
-
-  const createPersonalFridge = async (email, slug) => {
-    console.log("creating personal fridge", email, slug)
-    var body = {
-      email,
-      slug
-    }
-    var requestOptions = {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    };
-
-    var response = makeHTTPRequest(requestOptions, "https://looking-glass-api.herokuapp.com/api/fridge");
-
-    if (!response) {
-      alert("personal fridge creation failed")
-      return;
-    }
-
-    console.log("personal fridge creation succeeded, response: " + JSON.stringify(response))
   }
 
   const loginDemoAccount = async () => {

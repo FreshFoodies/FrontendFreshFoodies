@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React from "react";
 import InventoryScreen from './InventoryScreen';
 import HouseBasketScreen from './HouseBasketScreen';
 import ScanReceiptScreen from "./ScanReceiptScreen";
@@ -9,6 +10,8 @@ import { AntDesign, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-ic
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = () => {
+  const [offer, setOffer] = React.useState(0);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -31,6 +34,7 @@ const HomeScreen = () => {
             <MaterialCommunityIcons name="fridge-outline" color={color} size={35} />
           ),
         }}
+        initialParams={{}}
       />
       <Tab.Screen
         name="Scanner"
@@ -45,7 +49,6 @@ const HomeScreen = () => {
       />
       <Tab.Screen
         name="HouseBasket"
-        component={HouseBasketScreen}
         options={{
           tabBarLabel: '',
           tabBarShowLabel: false,
@@ -53,6 +56,7 @@ const HomeScreen = () => {
             <FontAwesome5 name="shopping-basket" color={color} size={30} />
           ),
         }}
+        children={() => <HouseBasketScreen offer={offer+1} />}
       />
       <Tab.Screen
         name="Logout"
